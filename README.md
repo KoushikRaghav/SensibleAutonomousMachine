@@ -51,7 +51,7 @@ Interfacing SAM to follow back an object by crossing obstacles and to reach dest
 
 ## ARCHITECTURE DIAGRAM ##
 
-![3](https://user-images.githubusercontent.com/24918359/56951976-c5b76200-6b56-11e9-84fb-0974f7e516e1.jpg)
+![21](https://user-images.githubusercontent.com/24918359/56954402-52185380-6b5c-11e9-8096-6df731268d7d.jpg)
 
 ## MODULE DESCRIPTION ##
 
@@ -509,4 +509,31 @@ This creates a frozen_inference_graph.pb file in the \object_detection\inference
 ###7. Use Newly Trained Object Detection Classifier ###
 
 Before running the Python scripts, you need to modify the NUM_CLASSES variable in the script to equal the number of classes you want to detect. So NUM_CLASSES = 2. To test your object detector, move a picture of the object or objects into the \object_detection folder, and change the IMAGE_NAME variable in the Object_detection_image.py to match the file name of the picture. Alternatively, you can use a video of the objects (using Object_detection_video.py), or just plug in a USB webcam and point it at the objects (using Object_detection_webcam.py).
+
+## Working with Machine ##
+Producing control systems capable of analyzing sensory data in order to provide accurate detection of other vehicles and the road ahead fusing data from multiple sensors. Data Replication between sensory data and real time camera [8]. Monitoring entire surrounding to identify the colour patterns of traffic signal and performing right/left turn by getting trained in predicting static/dynamic models. Maintain ratio of frames captured and running status of machine.
+
+###	Sensor Testing ###
+
+IR sensor sends binary values by receiving and decoding signals. The led sends and receives live data of road patterns and communicate the output value with mo-tor IC. Absorption and Reflection of black and white signals to make the machine sense the road patterns for moving forward and turn operations (left and right).
+
+### Motor Testing ###
+
+L293D Motor Driver IC consists of 4 input pins, 4 output pins and 2 enable pins. When enable A is high, left motor (input 1 and input 2) works. When enable B is high, right motor (input 3 and input 4) works. 
+
+Input 1	Input 2	 Result
+   0      	0	     Stop
+   0	      1	     Anti-Clockwise
+   1	      0	     Clockwise
+   1	      1	     Stop
+   
+
+A GPS aerial is mounted at the rear for location information featuring gyroscopes, altimeters and a tachometer to avoid a minute miscalculation of the machine’s positions.
+
+The machine can safely drive itself under specific conditions such as expressway merging, high speed cruising, low speed traffic jam, closed-campus operations by classifying object patterns and traffic signals. Infrared Sensor performs identification of road patterns during self-parking scenarios by absorbing and reflecting Infrared signals [9]. Pi camera is fixed on top of the machine to detect signal patterns by clas-sifying colors from comparing with the trained data at frequent measure of time
+
+## Conclusion and Future Work ##
+
+The proposed work uses different modules for providing automation to the robotic machine. There are certain systems providing security in existence but with less effi-ciency but our project deals with live data in the form of continuous images which gets automatically deleted after some point of time. This improves the efficiency of the system. Although the machine senses traffic signals and proceed moving opera-tions, installation of higher-grade cameras and motor power shall improve efficiency, performance and speed control of the machine respectively. More complicated im-ages are given as input to train the machine act according to emergency situations by predicting and analyzing. 
+
 
