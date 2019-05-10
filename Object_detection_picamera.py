@@ -1,23 +1,3 @@
-######## Picamera Object Detection Using Tensorflow Classifier #########
-#
-# Author: Evan Juras
-# Date: 4/15/18
-# Description: 
-# This program uses a TensorFlow classifier to perform object detection.
-# It loads the classifier uses it to perform object detection on a Picamera feed.
-# It draws boxes and scores around the objects of interest in each frame from
-# the Picamera. It also can be used with a webcam by adding "--usbcam"
-# when executing this script from the terminal.
-
-## Some of the code is copied from Google's example at
-## https://github.com/tensorflow/models/blob/master/research/object_detection/object_detection_tutorial.ipynb
-
-## and some is copied from Dat Tran's example at
-## https://github.com/datitran/object_detector_app/blob/master/object_detection_app.py
-
-## but I changed it to make it more understandable to me.
-
-
 # Import packages
 import os
 import cv2
@@ -45,7 +25,6 @@ args = parser.parse_args()
 if args.usbcam:
     camera_type = 'usb'
 
-# This is needed since the working directory is the object_detection folder.
 sys.path.append('..')
 
 # Import utilites
@@ -69,10 +48,7 @@ PATH_TO_LABELS = os.path.join(CWD_PATH,'data','mscoco_label_map.pbtxt')
 NUM_CLASSES = 2
 
 ## Load the label map.
-# Label maps map indices to category names, so that when the convolution
-# network predicts `5`, we know that this corresponds to `airplane`.
-# Here we use internal utility functions, but anything that returns a
-# dictionary mapping integers to appropriate string labels would be fine
+
 label_map = label_map_util.load_labelmap(PATH_TO_LABELS)
 categories = label_map_util.convert_label_map_to_categories(label_map, max_num_classes=NUM_CLASSES, use_display_name=True)
 category_index = label_map_util.create_category_index(categories)
@@ -117,10 +93,6 @@ font = cv2.FONT_HERSHEY_SIMPLEX
 # The camera has to be set up and used differently depending on if it's a
 # Picamera or USB webcam.
 
-# I know this is ugly, but I basically copy+pasted the code for the object
-# detection loop twice, and made one work for Picamera and the other work
-# for USB.
-
 ### Picamera ###
 if camera_type == 'picamera':
     # Initialize Picamera and grab reference to the raw capture
@@ -133,9 +105,7 @@ if camera_type == 'picamera':
     for frame1 in camera.capture_continuous(rawCapture, format="bgr",use_video_port=True):
 
         t1 = cv2.getTickCount()
-        
-        # Acquire frame and expand frame dimensions to have shape: [1, None, None, 3]
-        # i.e. a single-column array, where each item in the column has the pixel RGB value
+            
         frame = np.copy(frame1.array)
         frame.setflags(write=1)
         frame_expanded = np.expand_dims(frame, axis=0)
@@ -145,7 +115,7 @@ if camera_type == 'picamera':
             [detection_boxes, detection_scores, detection_classes, num_detections],
             feed_dict={image_tensor: frame_expanded})
 
-        # Draw the results of the detection (aka 'visulaize the results')
+        # Draw the results of the detection 
         vis_util.visualize_boxes_and_labels_on_image_array(
             frame,
             np.squeeze(boxes),
@@ -207,7 +177,6 @@ elif camera_type == 'usb':
         t1 = cv2.getTickCount()
 
         # Acquire frame and expand frame dimensions to have shape: [1, None, None, 3]
-        # i.e. a single-column array, where each item in the column has the pixel RGB value
         ret, frame = camera.read()
         frame_expanded = np.expand_dims(frame, axis=0)
 
