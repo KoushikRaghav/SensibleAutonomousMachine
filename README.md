@@ -496,7 +496,7 @@ You can view the progress of the training job by using TensorBoard. To do this, 
 
 The training routine periodically saves checkpoints about every five minutes. You can terminate the training by pressing Ctrl+C while in the command prompt window. I typically wait until just after a checkpoint has been saved to terminate the training. You can terminate training and start it later, and it will restart from the last saved checkpoint. The checkpoint at the highest number of steps will be used to generate the frozen inference graph.
 
-###6. Export Inference Graph ###
+### 6. Export Inference Graph ###
 
 Now that training is complete, the last step is to generate the frozen inference graph (.pb file). From the \object_detection folder, issue the following command, where “XXXX” in “model.ckpt-1962” should be replaced with the highest-numbered .ckpt file in the training folder:
 
@@ -506,14 +506,14 @@ python export_inference_graph.py --input_type image_tensor --pipeline_config_pat
 
 This creates a frozen_inference_graph.pb file in the \object_detection\inference_graph folder. The .pb file contains the object detection classifier.
 
-###7. Use Newly Trained Object Detection Classifier ###
+### 7. Use Newly Trained Object Detection Classifier ###
 
 Before running the Python scripts, you need to modify the NUM_CLASSES variable in the script to equal the number of classes you want to detect. So NUM_CLASSES = 2. To test your object detector, move a picture of the object or objects into the \object_detection folder, and change the IMAGE_NAME variable in the Object_detection_image.py to match the file name of the picture. Alternatively, you can use a video of the objects (using Object_detection_video.py), or just plug in a USB webcam and point it at the objects (using Object_detection_webcam.py).
 
 ## Working with Machine ##
 Producing control systems capable of analyzing sensory data in order to provide accurate detection of other vehicles and the road ahead fusing data from multiple sensors. Data Replication between sensory data and real time camera [8]. Monitoring entire surrounding to identify the colour patterns of traffic signal and performing right/left turn by getting trained in predicting static/dynamic models. Maintain ratio of frames captured and running status of machine.
 
-###	Sensor Testing ###
+## Sensor Testing ##
 
 IR sensor sends binary values by receiving and decoding signals. The led sends and receives live data of road patterns and communicate the output value with mo-tor IC. Absorption and Reflection of black and white signals to make the machine sense the road patterns for moving forward and turn operations (left and right).
 
