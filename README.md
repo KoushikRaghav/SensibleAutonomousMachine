@@ -103,8 +103,8 @@ Interfacing SAM to follow back an object by crossing obstacles and to reach dest
 
 First, the Raspberry Pi needs to be fully updated. Open a terminal and issue:
 
-sudo apt-get update
-sudo apt-get dist-upgrade
+    sudo apt-get update
+    sudo apt-get dist-upgrade
 
 ![1](https://user-images.githubusercontent.com/24918359/56953172-8dfde980-6b59-11e9-90bd-ad1ec2777631.png)
 
@@ -116,16 +116,16 @@ mkdir tf
 cd tf
 wget https://github.com/lhelontra/tensorflow-on-arm/releases/download/v1.8.0/tensorflow-1.12.0-cp35-none-linux_armv7l.whl
 
-sudo pip3 install /home/pi/tf/tensorflow-1.12.0-cp35-none-linux_armv7l.whl
+    sudo pip3 install /home/pi/tf/tensorflow-1.12.0-cp35-none-linux_armv7l.whl
 
 TensorFlow also needs the LibAtlas package. Install it by issuing 
 
-sudo apt-get install libatlas-base-dev
+    sudo apt-get install libatlas-base-dev
 
 While we’re at it, let’s install other dependencies that will be used by the TensorFlow Object Detection API. These are listed on the installation instructions in TensorFlow’s Object Detection GitHub repository. Issue:
 
-sudo pip3 install pillow lxml jupyter matplotlib cython
-sudo apt-get install python-tk
+    sudo pip3 install pillow lxml jupyter matplotlib cython
+    sudo apt-get install python-tk
 
 ### 3. Install OpenCV ###
 
@@ -133,14 +133,14 @@ TensorFlow’s object detection examples typically use matplotlib to display ima
 
 To get OpenCV working on the Raspberry Pi, there’s quite a few dependencies that need to be installed through apt-get. If any of the following commands don’t work, issue “sudo apt-get update” and then try again. Issue:
 
-sudo apt-get install libjpeg-dev libtiff5-dev libjasper-dev libpng12-dev
-sudo apt-get install libavcodec-dev libavformat-dev libswscale-dev libv4l-dev
-sudo apt-get install libxvidcore-dev libx264-dev
-sudo apt-get install qt4-dev-tools
+    sudo apt-get install libjpeg-dev libtiff5-dev libjasper-dev libpng12-dev
+    sudo apt-get install libavcodec-dev libavformat-dev libswscale-dev libv4l-dev
+    sudo apt-get install libxvidcore-dev libx264-dev
+    sudo apt-get install qt4-dev-tools
 
 Now that we’ve got all those installed, we can install OpenCV. Issue:
 
-pip3 install opencv-python
+    pip3 install opencv-python
 
 ### 4. Compile and Install Protobuf ###
 
@@ -148,7 +148,7 @@ The TensorFlow object detection API uses Protobuf, a package that implements Goo
 
 First, get the packages needed to compile Protobuf from source. Issue:
 
-sudo apt-get install autoconf automake libtool curl
+    sudo apt-get install autoconf automake libtool curl
 
 Then download the protobuf release from its GitHub repository by issuing:
 
@@ -156,42 +156,44 @@ wget https://github.com/google/protobuf/releases/download/v3.5.1/protobuf-all-3.
 
 If a more recent version of protobuf is available, download that instead. Unpack the file and cd into the folder:
 
-tar -zxvf protobuf-all-3.5.1.tar.gz
-cd protobuf-3.5.1
+    tar -zxvf protobuf-all-3.5.1.tar.gz
+    cd protobuf-3.5.1
 
 Configure the build by issuing the following command (it takes about 2 minutes):
 
-./configure
+    ./configure
 
 Build the package by issuing:
 
-make
+    make
 
 When it’s finished, issue:
 
-make check 
+    make check 
 
 This process takes even longer, clocking in at 107 minutes on Pi. According to other guides I’ve seen, this command may exit out with errors, but Protobuf will still work. Now that it’s built, install it by issuing:
 
-sudo make install
+    sudo make install
 
 Then move into the python directory and export the library path: 
-cd python
-export LD_LIBRARY_PATH=../src/.libs
+    
+    cd python
+    export LD_LIBRARY_PATH=../src/.libs
 
 Next, issue:
-python3 setup.py build --cpp_implementation 
-python3 setup.py test --cpp_implementation
-sudo python3 setup.py install --cpp_implementation
+
+    python3 setup.py build --cpp_implementation 
+    python3 setup.py test --cpp_implementation
+    sudo python3 setup.py install --cpp_implementation
 
 Then issue the following path commands:
 
-export PROTOCOL_BUFFERS_PYTHON_IMPLEMENTATION=cpp
-export PROTOCOL_BUFFERS_PYTHON_IMPLEMENTATION_VERSION=3
+    export PROTOCOL_BUFFERS_PYTHON_IMPLEMENTATION=cpp
+    export PROTOCOL_BUFFERS_PYTHON_IMPLEMENTATION_VERSION=3
 
 Finally, issue:
 
-sudo ldconfig
+    sudo ldconfig
 
 Now Protobuf is installed on the Pi. Verify it’s installed correctly by issuing the command below and making sure it puts out the default help text.
 
@@ -199,23 +201,24 @@ Protoc
 
 For some reason, the Raspberry Pi needs to be restarted after this process, or TensorFlow will not work. Go ahead and reboot the Pi by issuing:
 
-sudo reboot now
+    sudo reboot now
 
 ### 5. Set up TensorFlow Directory Structure and PYTHONPATH Variable ###
 
 Now that we’ve installed all the packages, we need to set up the TensorFlow directory. Move back to your home directory, then make a directory called “tensorflow1”, and cd into it.
 
-mkdir tensorflow1
-cd tensorflow1
+    mkdir tensorflow1
+    cd tensorflow1
 
 Download the tensorflow repository from GitHub by issuing:
 
-git clone --recurse-submodules https://github.com/tensorflow/models.git
+    git clone --recurse-submodules https://github.com/tensorflow/models.git
 
 Next, we need to modify the PYTHONPATH environment variable to point at some directories inside the TensorFlow repository we just downloaded. We want PYTHONPATH to be set every time we open a terminal, so we have to modify the .bashrc file. Open it by issuing:
-sudo nano ~/.bashrc
 
-export PYTHONPATH=$PYTHONPATH:/home/pi/tensorflow1/models/research:/home/pi/tensorflow1/models/research/slim
+    sudo nano ~/.bashrc
+
+    export PYTHONPATH=$PYTHONPATH:/home/pi/tensorflow1/models/research:/home/pi/tensorflow1/models/research/slim
 
 ![2](https://user-images.githubusercontent.com/24918359/56953173-8dfde980-6b59-11e9-99d4-6fcecf96bf92.png)
 
@@ -223,12 +226,12 @@ Then, save and exit the file. This makes it so the “export PYTHONPATH” comma
 
 Now, we need to use Protoc to compile the Protocol Buffer (.proto) files used by the Object Detection API. The .proto files are located in /research/object_detection/protos, but we need to execute the command from the /research directory. Issue:
 
-cd /home/pi/tensorflow1/models/research
-protoc object_detection/protos/*.proto --python_out=.
+    cd /home/pi/tensorflow1/models/research
+    protoc object_detection/protos/*.proto --python_out=.
 
 This command converts all the "name".proto files to "name_pb2".py files. Next, move into the object_detection directory:
 
-cd /home/pi/tensorflow1/models/research/object_detection
+    cd /home/pi/tensorflow1/models/research/object_detection
 
 Now, we’ll download the SSD_Mobilenet model from the TensorFlow detection model zoo. The model zoo is Google’s collection of pre-trained object detection models that have various levels of speed and accuracy. The Raspberry Pi has a weak processor, so we need to use a model that takes less processing power. Though the model will run faster, it comes at a tradeoff of having lower accuracy. For this tutorial, we’ll use SSD-MobileNet, which is the fastest model available.
 
@@ -236,8 +239,8 @@ Google is continuously releasing models with improved speed and performance, so 
 
 Download the SSD-MobileNet model and unpack it by issuing:
 
-wget http://download.tensorflow.org/models/object_detection/ssd_mobilenet_v2_coco_2018_05_09.tar.gz
-tar -xzvf ssdlite_mobilenet_v2_coco_2018_05_09.tar.gz
+    wget http://download.tensorflow.org/models/object_detection/ssd_mobilenet_v2_coco_2018_05_09.tar.gz
+    tar -xzvf ssdlite_mobilenet_v2_coco_2018_05_09.tar.gz
 
 Now the model is in the object_detection directory and ready to be used.
 
@@ -255,7 +258,7 @@ wget https://raw.githubusercontent.com/Parthi_Koushik/TensorFlow-Object-Detectio
 
 Run the script by issuing:
 
-python3 Object_detection_picamera.py 
+    python3 Object_detection_picamera.py 
 
 The script defaults to using an attached Picamera. If you have a USB webcam instead, add --usbcam to the end of the command:
 python3 Object_detection_picamera.py –usbcam
