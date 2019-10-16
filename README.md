@@ -433,11 +433,11 @@ python generate_tfrecord.py --csv_input=images\test_labels.csv --image_dir=image
 
 These generate a train.record and a test.record file in \object_detection. These will be used to train the new object detection classifier.
 
-###4. Create Label Map and Configure Training ###
+### 4. Create Label Map and Configure Training ###
 
 The last thing to do before training is to create a label map and edit the training configuration file.
 
-###4a. Label map ###
+### 4a. Label map ###
 
 The label map tells the trainer what each object is by defining a mapping of class names to class ID numbers. Use a text editor to create a new file and save it as labelmap.pbtxt in the C:\tensorflow1\models\research\object_detection\training folder. 
 item {
